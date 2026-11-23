@@ -16,7 +16,8 @@ async function main() {
         // outputFormat: "json", //text or json
         responseMimeType: "application/json", //text/plain or application/json
         temperature: 2.0, //float between 0.0 and 2.0, higher values means more creative responses
-        systemInstruction: "You are a helpful quiz generator. Generate a quiz with 3 questions and 4 options for each question. Provide the correct answer for each question.",
+        numberofQ:3,
+        systemInstruction: "You are a helpful quiz generator. Generate a quiz with ${numberofQ} questions and 4 options for each question. Provide the correct answer for each question.",
         responseSchema:{
             type: "object",
             properties: {
