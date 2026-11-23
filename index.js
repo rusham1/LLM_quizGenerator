@@ -13,8 +13,29 @@ async function main() {
     model: "gemini-3.1-flash-lite",
     contents: "On coding skills.",
     config:{
-        temperature: 0.7,
+        // outputFormat: "json", //text or json
+        responseMimeType: "application/json", //text/plain or application/json
+        temperature: 2.0, //float between 0.0 and 2.0, higher values means more creative responses
         systemInstruction: "You are a helpful quiz generator. Generate a quiz with 3 questions and 4 options for each question. Provide the correct answer for each question.",
+        responseSchema:{
+            type: "object",
+            properties: {
+                questions: {
+                    type: "array",
+                    items: {
+                        type: "object",
+                        properties: {
+                            question: { type: "string" },
+                            options: { type: "array", items: { type: "string" } },
+                            correct_Answer: { type: "string" },
+                            difficulty: { type: "string", enum: ["easy", "medium", "hard"] }
+                        },
+                        required: ["question", "options", "correct_Answer","difficulty"]
+                    }
+                }
+            },
+            required: ["questions"]
+        }
     }
   });
   //3/Display the response
