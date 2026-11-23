@@ -39,6 +39,16 @@ async function main() {
     }
   });
   //3/Display the response
+  const quiz=JSON.parse(response.text);;
+  quiz.questions.forEach((q, index) => {
+    console.log(`Question ${index + 1}: ${q.question}`);
+    q.options.forEach((option, optionIndex) => {
+      console.log(`  Option ${optionIndex + 1}: ${option}`);
+    });
+    console.log(`  Correct Answer: ${q.correct_Answer}`);
+    console.log(`  Difficulty: ${q.difficulty}`);
+    console.log(''); // Add a blank line for better readability
+  });
   console.log(response.text);
 }
 
