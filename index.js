@@ -36,14 +36,15 @@ const configuration = {
         responseSchema: resSchema,
     }
 
-
+const prompt=`On ${topicForQuiz}.`
 //2/Make our first API call
 async function main() {
   const response = await ai.models.generateContent({
     model: "gemini-3.1-flash-lite",
-    contents: `On ${topicForQuiz}.`,
+    contents: prompt,    
     config: configuration
   });
+  
   //3/Display the response
   const quiz=JSON.parse(response.text);;
   quiz.questions.forEach((q, index) => {
