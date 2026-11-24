@@ -1,5 +1,7 @@
 import 'dotenv/config';
 import { GoogleGenAI } from "@google/genai";
+import fs from 'fs';
+
 
 //1/Initialize Gemini
 const ai = new GoogleGenAI({ 
@@ -8,7 +10,7 @@ const ai = new GoogleGenAI({
 
 const numberofQ=3;
 const noOfOp=4;
-const topicForQuiz= "coding skills";
+// const topicForQuiz= "coding skills";
 const resSchema = {
             type: "object",
             properties: {
@@ -32,11 +34,27 @@ const configuration = {
         // outputFormat: "json", //text or json
         responseMimeType: "application/json", //text/plain or application/json
         temperature: 2.0, //float between 0.0 and 2.0, higher values means more creative responses
-        systemInstruction: `You are a helpful quiz generator. Generate a quiz with ${numberofQ} questions and ${noOfOp} options for each question. Provide the correct answer for each question.`,
+        systemInstruction: `You are a helpful quiz generator. 
+                            Generate a quiz with ${numberofQ} questions and ${noOfOp} options for each question. 
+                            Provide the correct answer for each question.
+                            Base every question on the content of the image provided.`,
         responseSchema: resSchema,
     }
 
-const prompt=`On ${topicForQuiz}.`
+const imagePath='./images/note.jpeg';
+const imageData=fs.readFileSync(imagePath).toString('base64');
+
+const prompt=[
+    {
+        text: `Attached is an image is an image. Please generate a quiz based on the content of the image. The quiz should contain ${numberofQ} questions, each with ${noOfOp} options. Provide the correct answer for each question and indicate the difficulty level (easy, medium, hard) for each question.`
+    },
+    {
+        inlineData: {
+            mimeType: 'image/jpeg',
+            data: imageData
+        }
+    },
+]
 //2/Make our first API call
 async function main() {
   const response = await ai.models.generateContent({
@@ -44,7 +62,7 @@ async function main() {
     contents: prompt,    
     config: configuration
   });
-  
+
   //3/Display the response
   const quiz=JSON.parse(response.text);;
   quiz.questions.forEach((q, index) => {
@@ -56,7 +74,7 @@ async function main() {
     console.log(`  Difficulty: ${q.difficulty}`);
     console.log(''); // Add a blank line for better readability
   });
-  console.log(response.text);
+//   console.log(response.text);
 }
 
 await main();
