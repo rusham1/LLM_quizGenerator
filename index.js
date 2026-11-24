@@ -9,15 +9,18 @@ const ai = new GoogleGenAI({
 
 //2/Make our first API call
 async function main() {
+    const numberofQ=3;
+    const noOfOp=4;
+    const topicForQuiz= "coding skills";
+
   const response = await ai.models.generateContent({
     model: "gemini-3.1-flash-lite",
-    contents: "On coding skills.",
+    contents: `On ${topicForQuiz}.`,
     config:{
         // outputFormat: "json", //text or json
         responseMimeType: "application/json", //text/plain or application/json
         temperature: 2.0, //float between 0.0 and 2.0, higher values means more creative responses
-        numberofQ:3,
-        systemInstruction: "You are a helpful quiz generator. Generate a quiz with ${numberofQ} questions and 4 options for each question. Provide the correct answer for each question.",
+        systemInstruction: `You are a helpful quiz generator. Generate a quiz with ${numberofQ} questions and ${noOfOp} options for each question. Provide the correct answer for each question.`,
         responseSchema:{
             type: "object",
             properties: {
