@@ -3,7 +3,8 @@ import { ai, model, systemInstruction } from './assistant.js';
 async function main() {
     const response = await ai.models.generateContent({
         model: model,
-        contents: 'Explain why photosynthesis happens at night in exactly one sentence, including the second sentence',
+
+        contents: 'i am a father of two children. what are the best ways to manage my time effectively? in two sentences',
         config: {
             systemInstruction: systemInstruction,
 
