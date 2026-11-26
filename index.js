@@ -55,11 +55,17 @@ const prompt=[
         }
     },
 ]
+
+const follow_up_prompt = ["Overall difficulty of the quiz?","What is the topic of the quiz?"];
+
 //2/Make our first API call
 async function main() {
-  const response = await ai.models.generateContent({
-    model: "gemini-3.1-flash-lite",
-    contents: prompt,    
+    const history = []; //the whole conversation history, starts empty
+    history.push({ role: 'user', parts: prompt });
+
+    const response = await ai.models.generateContent({
+    model: "gemini-3.5-flash-lite",
+    contents: history,    
     config: configuration
   });
 
@@ -75,6 +81,18 @@ async function main() {
     console.log(''); // Add a blank line for better readability
   });
 //   console.log(response.text);
+
+    history.push({ role: 'model', parts: [{ text: response.text }] });
+
+    for (const follow_up of follow_up_prompt) {
+        history.push({ role: 'user', parts: [{ text: follow_up }] });
+        const response2=await ai.models.generateContent({
+        model: "gemini-3.5-flash-lite",
+        contents: history,
+    });
+    console.log(response2.text);
+    history.push({ role: 'model', parts: [{ text: response2.text }] });
+    }   
 }
 
 await main();

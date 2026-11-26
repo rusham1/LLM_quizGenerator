@@ -46,6 +46,6 @@ async function main() {
     });
     console.log(response2.text);
     history.push({ role: 'model', parts: [{ text: response2.text }] });
-    }
+    }   
    }
 main();
